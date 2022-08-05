@@ -212,7 +212,7 @@ sorting=nty,
     \vfill\null%
 % izberite pravi habilitacijski naziv mentorja!
     {\large \textsc{Mentor}: dr. Andrej Brodnik\par}%
-   {\large \textsc{Somentor}:  asist.dr.  Gašper Fele Žorž \par}%
+   {\large \textsc{Somentor}:  asist. dr.  Gašper Fele Žorž \par}%
     {\vskip 2em \large Ljubljana, \the\year \par}%
 \end{center}
 % prazna stran
@@ -235,6 +235,11 @@ licenco, ki je enaka tej.
 Podrobnosti licence so dostopne na spletni strani \href{http://creativecommons.si}{creativecommons.si} ali na Inštitutu za
 intelektualno lastnino, Streliška 1, 1000 Ljubljana.
 
+\vspace*{1cm}
+\begin{center}% 0.66 / 0.89 = 0.741573033707865
+\CcImageCc{0.741573033707865}\hspace*{1ex}\CcImageBy{1}\hspace*{1ex}\CcImageSa{1}%
+\end{center}
+}
 
 \vspace*{1cm}
 {\small \noindent
@@ -291,7 +296,7 @@ opis diplome v angleščini
 % zahvala
 \thispagestyle{empty}\mbox{}\vfill\null\it%
 \noindent
-Zahvalil bi se svoji družini, ki so mi v času študija stali ob strani ter me podpirali.
+Zahvalil bi se družini in prijateljem, ki so mi v času študija stali ob strani ter me podpirali.
 Prav tako bi se rad zahvalil mentorju in somentorju za usmerjanje in nasvete ob pisanju diplomskega dela. 
 \rm\normalfont
 
@@ -314,9 +319,8 @@ Prav tako bi se rad zahvalil mentorju in somentorju za usmerjanje in nasvete ob 
 Se ne uporabljeno/dokoncano (se vedno samo defaultna stvar) \newline
 \noindent\begin{tabular}{p{0.11\textwidth}|p{.39\textwidth}|p{.39\textwidth}}    % po potrebi razširi prvo kolono tabele na račun drugih dveh!
   {\bf kratica} & {\bf angleško}                              & {\bf slovensko} \\ \hline
-  {\bf CA}      & classification accuracy               & klasifikacijska točnost \\
-  {\bf DBMS} & database management system & sistem za upravljanje podatkovnih baz \\
-  {\bf SVM}   & support vector machine              & metoda podpornih vektorjev \\
+  {\bf SAML}      & Security Assertion Markup Language               & Označevalni jezik varnostnih trditev \\
+  {\bf HTTP} & Hypertext Transfer Protocol & Protokol za prenos hiperteksta \\
 %  \dots & \dots & \dots \\
 \end{tabular}
 
@@ -336,7 +340,7 @@ Se ne uporabljeno/dokoncano (se vedno samo defaultna stvar) \newline
 \bigskip
 
 %\noindent\textbf{Povzetek:} 
-\noindent Leta 2019 sem našel varnostno pomanjkljuvost na Univerzi v Ljubljani. Verifikacija identitete je pomanjkljiva, zato se bom v tej diplomski nalogi raziskal možne rešitve, ki bi ta problem odpravili. Raziskal bom vse ponudnike upraviteljev identitet v Sloveniji, jih med seboj primerjal, ter primerjal ponujene rešitve z zahtevami Univerze v Ljubljani. Ugotovitve raziskave bom predstavil Univerzi v Ljubljani, ter se z njimi dogovoril o nadaljnem postopku, možni implementaciji ipd. 
+\noindent Leta 2019 sem našel varnostno pomanjkljivost na spletni strani Univerze v Ljubljani, kjer sem opazil pomanjkljivosti pri verifikaciji identitete. V diplomski nalogi zato raziskujem možno rešitev, ki bi ta problem odpravila. Raziskujem prednosti in slabosti vseh ponudnikov za upravljanje identitet v Sloveniji, jih med seboj primerjam ter ponudim možno rešitev. Ugotovitve opravljene raziskave bom predstavil pristojnim na Univerzi v Ljubljani,  s katerimi se bom pogovoril o možnih nadaljnjih postopkih oz. možni implementaciji. 
 \bigskip
 
 \noindent\textbf{Ključne besede:} \tkeywords.
@@ -374,323 +378,45 @@ Se ne uporabljeno/dokoncano (se vedno samo defaultna stvar) \newline
 \chapter{Uvod}
 
 \section{Motivacija}
-Izhodišče za diplomsko nalogo je spletna varnost vseh študentov na Univerzi v Ljubljani. Tema za moje diplomsko delo bo iskanje alternativne rešitve za avtentikacijo uporabnikov Univerze v Ljubljani.Leta 2019 sem našel pomanjkljivost pri avtentikacije uporabnikov, če bi želeli ponastaviti geslo. Raziskal bom trenuten trg z rešitvami, ter poskusil vzpostaviti alternativno samostojno rešitev. \newline
+Izhodišče za diplomsko nalogo je spletna varnost. Študenti dnevno dostopajo do mnogih storitev, ki jih ponuja Univerza v Ljubljani. Med njimi so storitve, kot so spletne učilnice, Eduroam (mednarodna storitev gostovanja z dostopom do interneta Wi-Fi), izposoja gradiv v knjižnicah, spletne storitve Office 365... Da študenti varno dostopajo do storitev se morajo avtenticirati s svojo digitalno identiteto. To olajša delo študentom, saj lahko uporabijo enako uporabniško ime in geslo za vse storitve.
 
-V sklopu diplomske naloge bom raziskal kako oseba pride do svoje identitete, kakšen je proces, opisal trenutno pomanjkljivost, ter če obstaja boljši način avtentikacije.
+V sklopu diplomske naloge smo raziskali, kako študent pridobi digitalno identiteto, kakšen je njen življenjski cikel, ter razvijemo svoj proces avtentikacije uporabnikov pri uporabi storitev, ki se uporabljajo na Univerzi v Ljubljani.
 
-\chapter{Upravljanje identitet za študente}
+\section{Struktura diplomske naloge}
+Diplomsko delo pričenjamo s predstavitvijo zasnove našega sistema avtentikacije uporabnikov. Opišemo vsak del zasnovanega sistema, predstavimo kriterije po katerih smo izbrali uporabljene tehnologije v sistemu in jih opišemo. 
+V naslednjem poglavju opišemo kako študent pridobi digitalno identiteto, kakšen je njen življenjski cikel ter nato vsako od komponent sistema namestimo ter dodamo če smo prišli do katerih zapletov pri namestitvi in kako smo jih odpravili. 
+Predstavimo kako smo vse elemente sistema nato med seboj povezali, ter kako cel sistem deluje.
+V zadnjem poglavju opišemo možnosti nadaljnjega razvoje projekta.
 
-Ko je kandidat uspešno sprejet na študijsko smer se mu generira študentska identiteta. Vsak študent jo potrebuje, da lahko dostopa do e-učilnic, do e-mail naslova, izposoja gradivo v knjižnjici itd. \newline
-Ko se staž študija konča, se identiteta deaktivira in ostane neaktivna.
+\chapter{Tehnologija}
+\section{Pričakovanja}
 
-\begin{figure}[]
-\includegraphics[]{diploma-FRI-vzorec_11maj2021/Blank diagram.png}
-\caption{Življenski cikel identitete}
-\label{fig:IDlife}
-\end{figure}
+Študenti imamo dostop do mnogih storiteh preko naših identitet(izposoja knjig, eduroam, Studis, dostop do e-učilnic...). Za avtentikacijo na vsako storitev bi želeli imeti le en par uporabniškega imena in gesla in to nam omogoča federacijska avtentikacija. S federacijsko avtentikacijo se dostop uporabnikov in preverjanje pristnosti upravlja centralno. Vse uporabniške identitete se upravljajo v eni bazi podatkov. To upravitelju omrežja omogoča vpogled v identitete zaposlenih. Upravitelj omrežja določi podatkovne točke potrebne za ustvarjanje identitet uporabnikov za največjo varnost in natančnost. Federacijska avtentikacija temelji na informacijah, ki so na voljo v uporabniški bazi in povezuje to identiteto z digitalnimi dejavnostmi vsakega uporabnika. Poleg tega lahko upravitelj omrežja nastavi pravilnike in nadzor kaj, kje in kdaj lahko uporabniki dostopajo do podatkov. Uporabnikom lahko odobrijo ali prekličejo dostop v trenutku, ko se pridružijo drugi skupini ali odidejo na drugo mesto.
+\newline
 
-
-\section{Življenski cikel identitet za študente}
-
-Za boljše razumevanje bomo definirali naslednje vloge:
+Vse dodatne plasti varnosti ne povečujejo bremena zaposlenih. Federacijska avtentikacija poenostavi prijavo uporabnikov z odpravo prijavnih pozivov in gesel. Za določitev identitete uporabnika zadostuje uporabniško ime in geslo. Za uporabnike federacijsko preverjanje pristnosti pomeni manj težav in hitrejši dostop.
+\section{Zasnova sistema}
+Definirali bomo 4 glavne gradnike sistema:
 \begin{itemize}
-    \item Kandidat: Vsaka oseba, ki ima možnost vpisa na študij in se je vpisal na enega izmed študijskih programov.
-    \item Študent: Kandidat, ki je bil uspešno vpisan na študijski program. 
-    \item Bivši kandidat: Kandidat, ki mu je bil vpis na študijsko smer zavrnjen oz. če kandidat zavrne svoj vpis.
-    \item Bivši študent: Študent, ki je bil izključen, se izpiše,nima pogojev za ponavljanje letnika ali dokonča študij.
-    
+    \item uporabnik,
+    \item ponudniki storitev,
+    \item ponudnik identitete,
+    \item varnostni protokol za preverjanje pristnosti.
 \end{itemize}
 
-Vsaka oseba ima možnost vpisa na študij. V tem trenutku v postopku, bomo to stanje kvalificirali kot \emph{kandidat}. \emph{Kandidat}  je vsak, ki se je vpisal na enega izmed študijskih programov. V tem koraku ima postopek dva možno izida. Prva možnost je, da se \emph{kandidata} sprejme in je uspešno vpisan na študijski program. Če se to zgodi, pridobi vlogo \emph{študent}. Če se to ne zgodi in je zavrnjen pridobi vlogo \emph{ bivšega kandidata}. Enak izid je mogoč, če \emph{kandidat} prekliče svoj vpis. \newline
-
-Ko je \emph{kandidat} vpisan, prejme vlogo \emph{študenta}. V tem stanju \emph{študent} študira. Med študijem je lahko \emph{študent} izključen ali pa se izpiše. Če se to zgodi, pridobi vlogo \emph{bivšega študenta}. Če je uspešen in zaključi letnik oz. diplomira, se mu dodeli vloga \emph{bivši študent}, vsaj je z študijem zaključil. Če ni diplomiral, obstaja možnost, da mora je samo opravil letnik oz. mora ponavljati letnik. V takem primeru se ne zgodi nič (ostane mu vloga \emph{študent}). Če ne izpoljnjuje pogojev za ponavljanje letnika oz. vpis v višji letnik, se študij prekine in dobi vlogo \emph{bivši študent}.
-
-Vsaka oseba, ki je kadarkoli imela vlogo študenta (vse osebe z vlogami \emph{študent} oz. \emph{bivši študent}) imajo na univerzi svojo identiteto. 
-Celoten postopek se lahko vidimo na sliki \ref{fig:student}
+Vsak uporabnik ima svoj par uporabniškega imena in gesla. Uporabnik odpre svoj brskalnik in se pomakne do spletne aplikacije ponudnika storitev, ki za preverjanje pristnosti uporablja ponudnika identitete. Spletna aplikacija se odzove z zahtevo po overitvi uporabnika. Brskalnik posreduje zahtevo ponudniku identitete. Ponudnik identitete razčleni zahtevo overitve uporabnika. Če uporabnik ni overjen potem ponudnik identitete preveri pristnost uporabnika tako, da zahteva uporabniško ime in geslo ali kakšen drug faktor avtentikacije. Če je uporabnik že overjen, potem ponudnik identitete ta korak preskoči. Ponudnik identitete generira odgovor varnostnega protokola in ga vrne v uporabnikov brskalnik. Brskalnik pošlje ustvarjen odgovor spletni aplikaciji ponudnika storitve, ki ga preveri. Če je preverjanje uspešno, spletna aplikacija uporabniku odobri dostop. Celoten proces je tudi predstavljen na sliki \ref{fig:zasnova sistema}.
 
 \begin{figure}[H]
-\includegraphics[scale=0.8]{diploma-FRI-vzorec_11maj2021/ID MANAGEMENT ZA ŠTUDENTE.png}
-\caption{Upravljanje identitet za študente}
-\label{fig:student}
+\hspace{-1cm}
+\includegraphics[scale=0.85]{diploma-FRI-vzorec_11maj2021/Prof_sistem.jpg}
+\caption{Zasnova sistema}
+\label{fig:zasnova sistema}
 \end{figure}
 
-
-
-\section{Trenutno stanje}
-
-Kot sem že omenil v moji motivaciji diplomske naloge ima trenutna implementacija avtentikacije pomanjkljivost. 
-\newline 
-ID portal za študente je v domeni uni-lj in ima nameščen varnostni certifikat. Iz spletnega naslova lahko ugotovimo, da gre za zaščiteno različico HTTP protokola. Uporabljen je SSL (Secure Sockets Layer) protokol, ki omogoča šifriran prenos informacij prek spleta s protokolom HTTP (Hypertext Transfer Protocol). SSL omogoča uporabo digitalnih certifikatov, tako da spletni brskalnik lahko loči pristno spletno stran aplikacije od lažne. 
-
-Na osnovni strani ID portala za študente lahko študenti upravljajo s svojo identito, med njimi so naslednje možnosti
-
-\begin{itemize}
-    \item Aktivacija ali prevzem svoje UL-ID
-    \item Sprememba gesla
-    \item Urejanje pozabljenega gesla
-    \item Preverjanje kombinacije uporabniškega imena in gesla
-    \item Prijavljanje napak in težav
-\end{itemize}
-
-Pomanjkljivost se nahaja v možnosti urejanja pozabljenega gesla. Celotno zgradbo si lahko preberemo v magistrskem delu Hede Šturm \cite{magistrska}.
-
-\section{Pomanjkljivost}
-Leta 2019 sem našel pomanjkljivost v avtentikaciji uporabnikov, če so želeli ponastaviti geslo. Če želimo ponastaviti geslo potrebujemo priskrbeti naslednje podatke:
-\begin{itemize}
-    \item Ime
-    \item Priimek
-    \item Uporabniško ime
-    \item Datum rojstva
-    \item Vpisna številka
-    \item Fakulteto
-\end{itemize}
-
-Ko priskrbimo podatke se nam novo geslo izpiše na ekran. Če bi želeli ponastaviti geslo, se potrebujemo avtenticirati, kar v preprosti definiciji pomeni, da potrebujemo dokazati da smo oseba, za katero se izdajamo da smo. S tem sistemom to ni mogoče zagotoviti. Poglejmo zakaj.
-
-\begin{itemize}
-    \item Ime: Ga ve vsak, ki ga želi vedeti (npr. svojci, na družabnih omrežjih itd.)
-    \item Priimek: Ga ve vsak, ki ga želi vedeti (npr. svojci, na družabnih omrežjih itd.)
-    \item Uporabniško ime: Ga ne ve vsak, ampak ga ni težko ugotoviti. Uporabniško ime je vezano na osebo in je sestavljeno iz prve črke imena in prve črke priimka, ter štirih številk. Če bi se lotili ugibanja imamo zgolj 10000 možnosti, kar ni veliko.
-    \item Datum rojstva: Ga ve vsak, ki ga želi vedeti (npr. svojci, na družabnih omrežjih itd.).
-    \item Vpisna številka: Sestavljena iz osmih številk. Prve dve sta šifri fakultete, naslednji dve sta leto vpisa in zadnje štiri so "naključno generirane", ampak lahko z gotovostjo znižamo številko med eno od 0 do 250 (približno število vpisanih dijakov letno na fakulteto).
-    \item Fakulteto: Vezana na vpisno številko in pogosto hitro ugotovljena (npr. svojci, družabna omrežja itd.)
-\end{itemize}
-
-Vsi podatki, ki jih priskrbimo ne zadostujejo temu, da z gotovostjo potrdijo identiteto osebe, če želi ponastaviti geslo. Ta problem lahko rešimo z dvofaktorsko avtentikacijo, kjer bi uporabnik potreboval še drugo plast avtentikacije (običajno mobilni aparat oz. e-mail naslov ipd.). 
-
-\section{Naše zahteve}
-
-Ker bomo uporavljali z velikim številom uporabniških imen in gesel, bomo potrebovali federacijsko avtentikacijo. S federacijsko avtentikacijo se dostop uporabnikov in preverjanje pristnosti uporavlja centralno. Vse uporabniške identitete se upravljajo v eni bazi podatkov. To omogoča upravitelju omrežja vpogled in vpogled v identitete zaposlenih. Upravitelj omrežja določi podatkovne točke potrebne za ustvarjanje identitet uporabnikov za največjo varnost in natančnost. Federacijska avtentikacija nato temelji na informacijah, ki so na voljo v uporabniški bazi in povezuje to identiteto z digitalnimi dejavnostmi vsakega uporabnika. Poleg tega lahko uporavitelj omrežja nastavijo pravilnike in nadzor kaj, kje in kdaj lahko uporabniki dostopajo do podatkov. Uporabnikom lahko odobrijo ali prekličejo dostop v trenutku, ko se pridružijo drugi skupini ali odidejo na drugo mesto.
-\newline
-
-Vse te dodatne plasti varnosti ne povečujejo bremena zaposlenih. Federacijska avtentikacija poenostavi prijavo uporabnikov z odpravo prijavnih pozivov in gesel.
-
-Za določitev identitete uporabnika zadostuje uporabniško ime in geslo. Za uporabnike federacijsko preverjanje pristnosti pomeni manj težav in hitrejši dostop.
-
-
-\chapter{Potencialne rešitve}
-
-Na slovenskem trgu je več ponudnikov, med njimi QUEST, MS MIM, OSI, LRK, Unistar, IBM in še več.
-
-Ampak nas zanima, če bi lahko univerza sama uredila svojo avtentikacijsko rešitev. Zaradi tega sem si pogledal odprtokodne rešitve. Med njimi so naslednji, kot so Authentik, Keycloak, Authelia...
-
-
-\subsection{Možnost 1 - Authentik}
-
-Od prej naštetih odprtokodnih rešitev (Authentik, Keycloak, Authelia) si bomo najprej pobližje pogledali Authentik. 
-
-V dokumentaciji Authentika\cite{AuthentikLink} lahko vidimo, da bomo za namestitev potrebovali docker, docker-compose ter Linux sistem, na katerem bomo gostili Authentik. Docker in docker-compose sta javno dostopna in brezplačna. 
-\newline    
-Authentik, kot ponudnik identitete, podpira SAML2, 0Auth2, OIDC in LDAP. Ker bomo potrebovali federacijsko avtentikacijo mora naš ponudnik identete podpirati SAML, za kar je pa Authentik ustrezen. 
-
-Authentik omogoča tudi registracijo uporabnikov, če bi se za to odločili. Prav tako imamo popoln dostop do vseh funkcionalnosti kar nam omogoča, da lahko sami odpravimo probleme, ki se pojavijo in nam ni treba čakati na posrednika. Podpira tudi večkratno preverjanje pristnosti, kar nam poveča varnost uporabnikov. 
-\newline    
-Meni najboljša lastnost je pa aktivna baza uporabnikov in razvijalcev, ki so dostopni na Discord serverju, ki je dostopen tudi preko uradne strani Authentika: \url{https://discord.com/invite/jg33eMhnj6}
-
-\subsection{Možnost 2 - Keycloak}
-
-Keycloak je po zmožnostih zelo podoben Authentiku. 
-
-Prav tako podpira SAML2, OAuth2 in OIDC. Ne podpira protokola LDAP, ampak ga v nimamo v našem načrtu. 
-\newline
-Uporabniki se prav tako lahko registrirajo in imamo popoln dostop do funkcionalnosti. Podpira večkratno preverjanje pristnosti.
-
-Razlog, da smo izbrali Authentik in ne Keycloak je, ker imamo boljši dostop do skupnosti razvijalcev in uporabnikov pri Authentiku.
-
-\subsection{Možnost 3 - Authelia}
-
-V industriji je od 2016 in je uporabniku prijazna, ampak za nas ni primerna. 
-\newline
-Za naše potrebe ne podpira protookla SAML2 ali OAuth2, kar je za nas ključnega pomena, zato za nas ni primerna. 
-
-\section{Arhitektura sistema}
-
-Sedaj ko vemo kaj potrebujemo lahko začnemo z zgradbo sistema. Potrebovali bomo ponudnika identitete, ki vzpostavi identiteto uporabnika in se poveže s ponudnikom storitev. Nato pa varnostni protokol SAML (Security Assertion Markup Language) preveri pristnost uporabnika. 
-
-Izbrati moramo ponudnika identitete, ki nudi podporo federacijam, ter podpira protokol SAML. Od že prej naštetih (Authentik,Keycloak, Apache Syncope, FusionAuth, OpenIAM, Gluu ipd.) sem izbral Authentik. Je brezplačen, odprtokoden ter ima aktivno bazo uporabnikov ter razvijalcev. Seveda nudi tudi podporo vsem že naštetim zahtevam.  
-\newline
-
-Authentik sem postavil na Ubuntu Serverju ter vzpostavil par testnih uporabnikov. Za ponudnika storitve sem vzpostavil Wordpress stran na spletni strani www.davidkonc.xyz (dostopno: 23.5.2022). Uporabnik lahko bere blog, ter ureja nastavitve, ampak da lahko ureja nastavitve se more prijaviti. Za prijavo se uporabnika preusmeri na Authentik, kjer se avtenticira in potem lahko ureja stran. 
-
-\begin{figure}[H]
-\includegraphics[scale=0.7]{diploma-FRI-vzorec_11maj2021/SAML.jpg}
-\caption{Kako deluje SAML}
-\label{fig:grafMoj}
-\end{figure}
-
- \section{Namestitev Authentika}
-
-Uspešna namestitev Authentika ima par zahtev, ki jih lahko vidimo na spletni strani \cite{AuthentikLink}.
-Potrebovali bomo operacijski sistem Linux z vsaj dvema jedroma in vsaj 2GB RAM-a. Poleg tega bomo potrebovali docker, ter docker-compose. 
-
-Docker je odprtokodna tehnologija kontejnerizacije za gradnjo in posodabljanje naših aplikacij.
-Docker compose je orodje za definiranje in izvajanje aplikacij Docker z več kontejnerji. Z možnostjo Compose uporabimo datoteko YAML za konfiguriranje storitev naših aplikacij. Nato z enim ukazom ustvarimo in zaženemo vse storitve iz naših konfiguracij.
-\subsection{Namestitev Docker in docker-compose}
-
-Za namestitev docker na sistemu Ubuntu lahko sledimo uradni strani \cite{DockerLink}, ki nam pove kaj vse moramo storiti. 
-
-Najprej bomo odstranili stare verzije, če so prisotne. Če pa niso, nam pa zagnati tak ukaz ne škodi.
-
-
-\begin{lstlisting}[language=bash]
- $ sudo apt-get remove docker docker-engine docker.io containerd runc
-\end{lstlisting}
-
- Nato pa lahko naložimo Docker. Obstaja več možnih načinov, mi bomo uporabili curl.
- \newline
- Ukaz curl je orodje za prenos ali prenos datotek/podatkov iz ali na strežnik z uporabo FTP, HTTP, HTTPS, SCP, SFTP, SMB in drugih podprtih protokolov v sistemu Linux ali Unixu.
- 
- Če še nimamo nameščenega na sistem, ga moramo naložiti z uporabo apt ukaza oz. apt-get ukaza. To lahko naredimo preprosto z naslednjimi ukazi.
- 
-\begin{lstlisting}[language=bash]
-$ sudo apt update
-$ sudo apt upgrade
-$ sudo apt install curl
-\end{lstlisting}
-
-Sedaj lahko namestimo docker z naslednjima ukazoma.
-
-
-\begin{lstlisting}[language=bash]
-$  curl -fsSL https://get.docker.com -o get-docker.sh
-
-$  sudo sh get-docker.sh
-\end{lstlisting}
-
-Od zahtev za namestitev Authentika nam sedaj manjka samo še Docker Compose. Navodila za njegovo namestitev lahko najdemo na spletni strani \cite{DockerCompose}. 
-
-Namestili ga bomo ponovno z uporabo ukaza curl, ki ga sedaj že imamo nameščenega.
-
-
-\begin{lstlisting}[language=bash]
-$ curl -SL https://github.com/docker/compose/releases/
-download/v2.5.0/docker-compose-linux-x86_64 -o /
-usr/local/bin/docker-compose
-
-$   sudo chmod +x /usr/local/bin/docker-compose
-\end{lstlisting}
-
-Če nam je namestitev uspela, lahko preverimo verzijo Docker Compose, z naslednjim ukazom. Če se nam verzija prikaže, je namestitev uspela.
-
-\begin{lstlisting}[language=bash]
-$  docker-compose --version
-\end{lstlisting}
-
-\subsection{Namestitev sistema}
-
-Ko imamo vse potrebne zahteve za namestitev sistema, lahko začnemo z namestitvijo. Kot sem omenil pri Docker Compose, bomo za konfiguracijo sistema uporabili datoteko YAML. Datoteko YAML lahko dobimo na spletni strani od Authentika\cite{AuthentikYAML} in jo postavimo v direktorij, kjer želimo imeti naš projekt. 
-
-Docker-compose projekt vsebuje naslednje kontejnerje:
-
-\begin{itemize}
-    \item Server. To je zaledna storitev, ki izvaja vso logiko, izvaja API in dejanski del SSO. Prav tako poganja sprednji del, gosti datoteke JS/CSS in služi tudi datotekam, ki smo jih naložili za ikone/itd.
-    \item Worker. Ta kontejner izvaja opravila v ozadju, vse, kar lahko vidite na strani Sistemska opravila v sprednjem delu.
-    \item redis in postgresql. Predpomnilnik in baza podatkov.
-\end{itemize}
-
-Ker je to sveža namestitev Authentika, moramo še zgenerirati geslo. V ukaznem pozivu se premaknemo v direktorij, kamor smo shranili prej omenjeno YAML datoteko. Sedaj pa napišemo naslednje ukaze.
-
-\begin{lstlisting}[language=bash]
-$  sudo apt-get install -y pwgen
-echo "PG_PASS=$(pwgen -s 40 1)" >> .env
-echo "AUTHENTIK_SECRET_KEY=$(pwgen -s 50 1)" >> .env
-\end{lstlisting}
-
-Zaradi omejitve PostgreSQL so podprta gesla samo do 99 znakov. Več o tem si lahko preberete na uradni strani od PostgreSQL\cite{PostgreSQL}. Kljub temu bo to nam zadostovalo. \newline
-
-V .env datoteki v našem direktoriju se trenutno nanaša naše geslo. Poleg tega, lahko v .env datoteko dodamo še par vrstic, da bo Authentik tekel na bolj prepoznavnih vratih 80/443. Da to naredimo, vse kar rabimo narediti, je dodati 2 vrstici kode na konec datoteke .env.
-
-\begin{lstlisting}[language=bash]
-AUTHENTIK_PORT_HTTP=80
-AUTHENTIK_PORT_HTTPS=443
-\end{lstlisting}
-
-Sedaj poženemo še naslednji ukaz, da se naše spremembe uveljavijo. 
-
-\begin{lstlisting}[language=bash]
-$ sudo docker-compose up -d
-\end{lstlisting}
-
-Da dokončamo nastavitev nam manjkata samo še dva ukaza, ki bosta sistem tudi zagnala.
-
-\begin{lstlisting}[language=bash]
-$ sudo docker-compose pull
-$ sudo docker-compose up -d
-\end{lstlisting}
-
-Naš sistem je postavljen. Da začnemo z upravljanjem našega sistema, navigiramo na naslov: $$https://<serverIP>/if/flow/initial-setup/$$. $$<serverIP>$$ moramo zamenjati z IP naslovom našega Ubuntu serverja. To lahko naredimo tako, da v ukazni poziv vpišemo naslednji ukaz:
-\begin{lstlisting}[language=bash]
-ip addr show
-\end{lstlisting}
-
-\begin{figure}[H]
-\includegraphics[scale=0.75]{diploma-FRI-vzorec_11maj2021/IP naslov.jpg}
-\caption{Naš IP naslov}
-\label{fig:student}
-\end{figure}
-
-Iz dobljenega razberemo naš IP naslov, ter z njim zamenjamo značko $$<serverIP>$$. To nas potem prinese na stran, kjer moramo določiti geslo za administratorja. 
-
-\begin{figure}[H]
-\includegraphics[scale=0.75]{diploma-FRI-vzorec_11maj2021/Uvodna stran.jpg}
-\caption{Prijavna stran}
-\label{fig}
-\end{figure}
-
-
-\section{Namestitev ponudnika storitev}
-
-Za ponudnika storitev sem se odločil, da bom gostil spletno stran Wordpress. Uporabniki se bodo lahko prijavili v spletno stran, ter posledično urejali izgled, pisali objave, upravljali nastavitve ipd. 
-Neprijavljeni uporabniki bodo pa lahko samo brali objave. 
-\newline
-Pri namestitvi Wordpressa bo veliko lažje, ker sem že pred pisanjem diplomskega dela imel v lasti svojo domeno, ki jo gostim preko hostinger.com in je dostopna na \href{www.davidkonc.xyz}{www.davidkonc.xyz} (dostopano 30.05.2022). 
-\newline
-Spletna stran je uporabniku prijazna, ima namreč veliko pripomočkov, ki nam bodo pri delu prišli prav.
-Preko uporabniškega vmesnika lahko registriramo domeno. Jaz sem si izbral ime davidkonc.xyz, ker sem ga uporabljal za online življenjepis pred pisanjem mojega diplomskega dela. 
-\newline
-Ko imamo registrirano domeno, lahko kliknemo na gumb "Manage", ki nas bo nesla na meni, ki upravlja z našo spletno stranjo, kot je to videno na sliki \ref{fig:hostinger}.
-
-\begin{figure}[H]
-\hspace{-3,5cm}
-\includegraphics[scale=0.65]{diploma-FRI-vzorec_11maj2021/hostinger.jpg}
-\caption{Uporabniški vmesnik Hostinger.com}
-\label{fig:hostinger}
-\end{figure}
-
-
-Gumb nas preusmeri na upravljalno ploščo naše spletne strani. Na njej lahko vidimo gumb "Install Wordpress", ki nam bo sam namestil Wordpress vmesnik na našo spletno stran. Če po tem dejanju dostopamo na našo spletno stran (\href{www.davidkonc.xyz}{www.davidkonc.xyz}) je sedaj viden osnoven Wordpress blog, kot vidno na sliki \ref{fig:wordpressOsn}.
-
-\begin{figure}[H]
-\hspace{-4cm}
-\includegraphics[scale=0.50]{diploma-FRI-vzorec_11maj2021/wordpress.jpg}
-\caption{Spletna stran davidkonc.xyz po namestitvi Wordpress vmesnika}
-\label{fig:wordpressOsn}
-\end{figure}
-
-
-
-\subsection{Upravljanje Wordpress strani}
-
-Sedaj, ko imamo nameščeno spletno stran jo lahko začnemo urejati, da bo primerna za našo potrebo povezave z Authentikom. Ob naložitvi Wordpressa na našo spletno stran, se je tudi kreiral administratorski uporabnik, ki ima enako ime in geslo kot uporabnik do našega gostitelja storitve. Da se prijavimo v našo storitev gremo lahko na spletno stran \href{www.davidkonc.xyz/wp-admin/}{www.davidkonc.xyz/wp-admin/}, ter se prijavimo.
-\newline
-Prijavljeni smo v administratorsko konzolo, kot je videno na sliki \ref{fig:adminWord}.
-
-\begin{figure}[H]
-\hspace{-2cm}
-\includegraphics[scale=0.7]{diploma-FRI-vzorec_11maj2021/Screenshot_1.jpg}
-\caption{Administratorska konzola Wordpress}
-\label{fig:adminWord}
-\end{figure}
-
-\section{Povezovanje Wordpressa z Authentikom}
-
-Cilj naloge je pridobiti možnost vpisa v našo administratorsko konzolo preko Authentika. Kot že omenjeno v poglavju Naše zahteve bomo potrebovali podporo federacijam, da se lahko veliko uporabnikov prijavi z uporabniškim imenom in geslom federacije. To lastnost podpira protokol SAML.
-
-\subsection{O SAML-u}
-
+\section{Uporabljene tehnologije}
+\subsection{SAML}
 \subsubsection{Kaj je SAML?}
-SAML je akronim, ki se uporablja za Security Assertion Markup Language. Je odprt standard, ki se uporablja za preverjanje pristnosti. Njegova primarna vloga pri spletni varnosti je, da nam omogoča dostop do več spletnih aplikacij z enim parom uporabniškega imena in gesla za prijavo. Deluje tako, da posredujemo podatke za preverjanje pristnosti v določeni obliki med dvema strankama, običajno ponudnikom identitete (idP), kar je v našem primeru Authentik in spletno aplikacijo, kar je v našem primeru Wordpress.
-Spletne aplikacije na podlagi formata Extensible Markup Language (XML) uporabljajo SAML za prenos podatkov za preverjanje pristnosti.
+SAML je akronim, ki se uporablja za Security Assertion Markup Language. Je odprt standard, ki se uporablja za preverjanje pristnosti. Njegova primarna vloga pri spletni varnosti je, da nam omogoča dostop do več spletnih aplikacij z enim parom uporabniškega imena in gesla za prijavo. Deluje tako, da posredujemo podatke za preverjanje pristnosti v določeni obliki med dvema strankama, običajno ponudnikom identitete (idP) in spletno aplikacijo. Spletne aplikacije na podlagi formata Extensible Markup Language (XML) uporabljajo SAML za prenos podatkov za preverjanje pristnosti.
 \newline
 Tehnološka industrija je ustvarila SAML za poenostavitev postopka preverjanja pristnosti, kjer so uporabniki morali dostopati do več neodvisnih spletnih aplikacij v različnih domenah. Ta lastnost je za nas glavna, ker ravno to je eden glavnih lastnosti, da ga bomo uporabili. Želimo, da če se želimo vpisati v e-mail račun lahko uporabimo enako uporabniško ime in geslo, kot pa če se želimo prijaviti v spletno učilnico. 
 
@@ -699,7 +425,7 @@ SAML deluje tako, da izmenjuje uporabniške podatke, kot so prijave, stanje prev
 \newline
 Dober primer je letalska industrija. Preden se vkrcate na letalo, mora letalski prevoznik potrditi, da smo tisti, za katerega se predstavljamo, da zagotovi varnost drugih potnikov. Torej preverijo našo identiteto z neko obliko identifikacije s sliko, ki jo je izdal državni organ. Ko potrdijo, da se vaše ime na naši identiteti ujema z imenom na naši letalski vozovnici, nam nato dovolijo, da se vkrcamo na letalo.
 \newline
-V spodnji sliki \ref{fig:grafMoj} je država ponudnik identitete, letalska družba pa ponudnik storitev. Naša identifikacijska številka, ki jo je izdal državni organ, je trditev SAML. Ko zaprosimo za osebno izkaznico, moramo običajno izpolniti obrazec, se fotografirati in v nekaterih okoliščinah tudi oddati prstne odtise. Država (ponudnik storitev) nato te identifikacijske atribute shrani v svojo bazo podatkov in nam izda fizični ID, povezan z našo identiteto. V primeru letalske družbe, ko prispemo do izhoda, letalska družba (ponudnik storitev) preveri našo trditev ID (SAML). Letalska družba sprejme našo osebno izkaznico, saj vsebuje naše podatke, osebna izkaznica ali potni list pa se pregleda kot veljaven dokument. Po uspešni avtentikaciji nam letalska družba dovoli vkrcanje na letalo.
+Država je ponudnik identitete, letalska družba pa ponudnik storitev. Naša identifikacijska številka, ki jo je izdal državni organ, je trditev SAML. Ko zaprosimo za osebno izkaznico, moramo običajno izpolniti obrazec, se fotografirati in v nekaterih okoliščinah tudi oddati prstne odtise. Država (ponudnik storitev) nato te identifikacijske atribute shrani v svojo bazo podatkov in nam izda fizični ID, povezan z našo identiteto. V primeru letalske družbe, ko prispemo do izhoda, letalska družba (ponudnik storitev) preveri našo trditev ID (SAML). Letalska družba sprejme našo osebno izkaznico, saj vsebuje naše podatke, osebna izkaznica ali potni list pa se pregleda kot veljaven dokument. Po uspešni avtentikaciji nam letalska družba dovoli vkrcanje na letalo.
 
 \subsubsection{Postopek avtentikacije z uporabom SAML-a}
 
@@ -715,112 +441,206 @@ SAML uporablja potek dela za preverjanje pristnosti, ki temelji na zahtevkih. Pr
     \item Brskalnik pošlje ustvarjen odgovor SAML spletni aplikaciji ponudnika storitev, ki ga preveri.
     \item Če je preverjanje uspešno, spletna aplikacija uporabniku odobri dostop.
 \end{itemize}
-    
-\subsection{Implementacija SAML-a}
-
-Ker imamo za ponudnika storitev Wordpress, se lahko poslužimo enega izmed mnogih vtičnikov, ki bo naredil SAML implementacijo za nas enostavno.  
-
-V zavihku Plugins (vtičniki) izberemo možnost Add new (dodaj novo). Če v okno za iskanje vnesemo besedo ''SAML'', se nam prikaže vtičnik  ''SAML Single Sign On - SAML SSO Login'', ki ga je naredilo podjetje miniOrange\cite{miniOrange}. 
+\subsection{Wordpress}
+Wordpress\cite{wordpress} je odprtokodni sistem za upravljanje vsebin. Funkcije vključujejo arhitekturo vtičnikov in sistem predlog, ki se v WordPressu imenujejo teme. WordPress je bil prvotno ustvarjen kot sistem za objavljanje spletnih dnevnikov.
 \newline
-Ko ga namestimo, se nam prikaže nov meni z imenom ''miniOrange SAML 2.0 SSO''. Ta meni in meni v Authentiku bomo sedaj uporabili, da vzpostavimo avtentikacijo. 
+Uporabljali ga bomo kot primer ponudnika storitev. Nekatere članice Univerze v Ljubljani ga uporabljajo za pisanje poročil znotraj razvojnih ekip in je popoln kandidat za ponudnika storitve. 
+\subsection{Moodle}
+Moodle\cite{Moodle} je brezplačen in odprtokoden sistem za upravljanje učenja, napisan v PHP in distribuiran pod GNU General Public License. Moodle se uporablja za učenje, izobraževanje na daljavo, učilnico in druge sheme spletnega učenja v šolah, na univerzah, na delovnih mestih in v drugih sektorjih.
 \newline
-Najprej pojdimo v Authentik meni, da najprej naredimo aplikacijo na ponudniku identitet. Navigiramo na IP-naslov našega ponudnika in se vpišemo z uporabniškim imenom administratorja, ki smo ga nastavili, ko smo nameščali Authentik. Ko se prijavimo, lahko vidimo, da še nimamo aktivnih aplikacij. Navigiramo na "Admin interface" (skrbniški vmesnik), kjer lahko sedaj na levi strani v meniju vidimo vse možnosti.
-
-\begin{figure}[H]
-\hspace{-3cm}
-\includegraphics[scale=0.55]{diploma-FRI-vzorec_11maj2021/admin_inter.jpg}
-\caption{Skrbniški vmesnik Authentika}
-\label{fig}
-\end{figure}
-
-Izberemo možnost Applications in Create, tukaj moramo pa sedaj specificirati vse potrebno, za uspešno povezavo. Tu je pomembno okno Provider (ponudnik), ki ga moramo tudi narediti. To bo naša implementacija SAML-a.Lahko kar kliknemo gumb Create provider (naredi ponudnika) in izberemo možnost ''SAML Provider''. 
-Od nas se bodo zahtevali naslednji podatki in vnesli bomo naslednje:
+Nekatere članice ga uporabljajo za gostovanje njihovih spletnih učilnic in je popoln kandidat za ponudnika storitev.
+\subsection{Ponudnik identitete}
+Preden lahko opišemo ponudnika identitete ga moramo izbrati. Na trgu je mnogo ponudnikov identitet, zato bomo definirali kriterije po katerem bomo ovrednotili potencialne ponudnike identitet in izbrali najbolj primernega. Kriteriji so naslednji:
 \begin{itemize}
-    \item Name (ime): Wordpress (izberemo sami).
-    \item Authorization flow: default-provider-authorization-explicit-consent
-    \item ACS URL: ta podatek pridobimo na strani vtičnika na naši Wordpress strani - v našem primeru je to: https://davidkonc.xyz/
-    \item Issuer: ta podatek pridobimo na strani vtičnika na naši Wordpress strani - v našem primeru je to: https://davidkonc.xyz/wp-content/plugins/miniorange-saml-20-single-sign-on/
-    \item Service Provider Binding:  Post
+    \item odprtokodnost,
+    \item brezplačnost,
+    \item podpira protokol SAML2,
+    \item podpira protokol LDAP,
+    \item podpira dvofaktorsko avtentikacijo,
+    \item podpira registracijo uporabnikov,
+    \item število posodobitev kode na strani GitHub\cite{github} v zadnjem letu.
 \end{itemize}
 
-\begin{figure}[H]
-\hspace{-1cm}
-\includegraphics[scale=0.6]{diploma-FRI-vzorec_11maj2021/SAMLprovi.jpg}
-\caption{Okno z nastavitvami ponudnika v Authentiku}
-\label{fig}
-\end{figure}
+Ker bomo sistem postavili sami bomo potrebovali celoten dostop do ozadja, zato je ključnega pomena, da je program odprtokoden. V sklopu diplomskega dela nimamo proračuna, zato mora biti sama nastavitev brezplačna. Ponudnik identitete mora podpirati protokol SAML2, ker je ključen za implementacijo federacijske avtentikacije. Prav tako mora podpirati protokol LDAP, saj so nekatere storitve v sistemu Univerze v Ljubljani dosegljive samo preko tega protokola kot npr. Eduroam. Podpirati mora dvofaktorsko avtentikacijo, ki nam bo služila kot sistem ponastavitve gesla in registracijo uporabnikov, če se za to odločimo. Zadnji kriterij nam bo služil kot približna ocena aktivnosti uporabnikov in razvijalcev na projektu. Število sprememb se bo merilo med obdobjem od 8.8.2021 do 24.7.2022. Želimo, da se ponudnik identitete aktivno razvija in ima aktivno bazo uporabnikov in razvijalcev.
 
-\begin{figure}[H]
-\hspace{-4cm}
-\includegraphics[scale=0.7]{diploma-FRI-vzorec_11maj2021/WordpressSAML.jpg}
-\caption{Okno z lastnostmi v SAML vtičniku v Wordpressu}
-\label{fig}
-\end{figure}
-
-Ko imamo ustvarjeneva ponudnika (Provider) v Authentiku, lahko dokončamo ustvarjanje aplikacije. Izpolniti moramo naslednje možnosti:
+\subsubsection{Authentik}
 \begin{itemize}
-    \item Name (ime): Wordpress (izberemo sami).
-    \item Slug: Wordpress (izberemo sami).
-    \item Provider: Wordpress (ime od pravkar ustvarjenega ponudnika).
-    \item Policy engline mode: ANY, any policy must match to grant access (privzeta vrednost). 
+    \item odprtokodnost: je odprtokoden,
+    \item brezplačnost: je brezplačen,
+    \item podpira protokol SAML2: ga podpira,
+    \item podpira protokol LDAP: ga podpira,
+    \item podpira dvofaktorsko avtentikacijo: jo podpira,
+    \item podpira registracijo uporabnikov: jo podpira,
+    \item število posodobitev kode na strani GitHub v zadnjem letu: 3333\cite{AuthentikGit},
 \end{itemize}
 
-\begin{figure}[H]
-\hspace{-2cm}
-\includegraphics[scale=0.65]{diploma-FRI-vzorec_11maj2021/AuthAplication.jpg}
-\caption{Okno z nastavitvami aplikacije v Authentiku}
-\label{fig}
-\end{figure}
-
-Sedaj smo na strani Authentika opravili. Konfigurirajmmo še vtičnik v Wordpressu. V meniju vtičnika izberemo ''Service Provider Setup'' in izberemo možnost ''Upload IDP Metadata''. Tukaj moramo sedaj vnesti XML datoteko z metapodatki od našega ponudnika identitet. To lahko dobimo pri našem ponudniku identitet v zavihku ''Provider'', kjer izberemo ponudnika, ki smo ga mi kreirali in ga izberemo. Na dnu strani se nam pojavi veliko okno z vsemi metapodatki. To lahko prenesemo, da potem naložimo v vtičnik v Wordpressu. 
-
-\begin{figure}[H]
-\hspace{-4cm}
-\includegraphics[scale=0.5]{diploma-FRI-vzorec_11maj2021/SAMLMetadata.jpg}
-\caption{Metapodatki v Authentiku}
-\label{fig}
-\end{figure}
-
-\subsection{Test konfiguracije}
-
-Z implementacijo smo sedaj zaključili. Preverimo, če sedaj vse deluje kot mora. 
-To bomo naredili na naslednji način:
+\subsubsection{Keycloak}
 \begin{itemize}
-    \item Navigirali bomo na prijavno stran od Wordpressa, ter se poskusili prijaviti z našim administratorskim uporabniškim imenom in geslom (od Authentika). 
-    \item Če je prijava uspešna bomo ustvarili novega uporabnika v direktoriju uporabnikov v Authentiku, brez vseh pravic. 
-    \item Navigirali bomo na prijavno stran od Wordpressa, ter se poskusili prijaviti z uporabniškim imenom in geslom od novo ustvarjenega uporabnika. Če je prijava uspešna, implementacija deluje. 
+    \item odprtokodnost: je odprtokoden,
+    \item brezplačnost: je brezplačen,
+    \item podpira protokol SAML2: ga podpira,
+    \item podpira protokol LDAP: ga podpira,
+    \item podpira dvofaktorsko avtentikacijo: jo podpira,
+    \item podpira registracijo uporabnikov: jo podpira,
+    \item število posodobitev kode na strani GitHub v zadnjem letu: 1164\cite{KeycloakGit},
+\end{itemize}
+\subsubsection{Authellia}
+\begin{itemize}
+    \item odprtokodnost: je odprtokoden,
+    \item brezplačnost: je brezplačen,
+    \item podpira protokol SAML2: ga ne podpira,
+    \item podpira protokol LDAP: ga podpira,
+    \item podpira dvofaktorsko avtentikacijo: jo podpira,
+    \item podpira registracijo uporabnikov: jo ne podpira,
+    \item število posodobitev kode na strani GitHub v zadnjem letu: 983\cite{AuthelliaGit},
+\end{itemize}
+\subsubsection{Odločitev za ponudnika identitete}
+Za ponudnika identete smo izbrali Authentik. Od predstavljenih možnosti je najbolj primeren. Ustreza vsem potrebnim kriterijem in ima največje število posodobitev kode na spletni strani GitHub. 
+\subsection{Authentik}
+Authentik\cite{AuthentikLink} je odprtokoden ponudnik identitete, osredotočen na prilagodljivost in vsestranskost. Authentik lahko uporabimo v obstoječem okolju, da dodamo podporo za nove protokole, implementiramo prijavo, obnovitev itd. Preverjanje pristnosti izvajamo po meri ali pa z logiko nadzora dostopa s kodo Python.
+\newline
+Uspešna namestitev Authentika ima par zahtev.
+Potrebovali bomo operacijski sistem Linux z vsaj dvema jedroma in vsaj 2GB RAM-a. Poleg tega bomo potrebovali docker ter docker-compose. 
+
+\subsection{Docker}
+Docker\cite{dockerLink} je odprtokodna tehnologija kontejnerizacije za gradnjo in posodabljanje naših aplikacij.
+Docker deluje kot aplikacija odjemalec-strežnik z:
+\begin{itemize}
+    \item strežnikom z dolgo delujočim demonskim procesom dockerd,
+    \item API (Application Programming Interface), ki določajo vmesnike, ki jih lahko programi uporabljajo za pogovor in ukazovanje demonu Docker,
+    \item Docker odjemalca vmesnika ukazne vrstice CLI (Command Line Interface).
+\end{itemize}
+CLI uporablja API-je Docker za nadzor ali interakcijo z demonom Docker prek skriptiranja ali neposrednih ukazov CLI. Številne druge aplikacije Docker uporabljajo osnovni API in CLI. Demon ustvarja in upravlja objekte Docker, kot so slike, vsebniki, omrežja in nosilci.
+
+\subsection{Docker Compose}
+\label{Docker}
+Docker Compose\cite{dockerComposeLink} je orodje za definiranje in izvajanje aplikacij Docker z več kontejnerji. Z možnostjo Compose uporabimo datoteko YAML za konfiguriranje storitev aplikacij. Nato z enim ukazom ustvarimo in zaženemo vse storitve iz konfiguracij.
+\chapter{Rešitev}
+\section{Upravljanje s študentskimi identitetami}
+Ko je kandidat sprejet na študijsko smer, se zanj generira študentska identiteta. Študetnska identiteta se potrebuje, da študent lahko dostopa do e-učilnic, e-mail naslovov, si z njo izposoja gradivo v knjižnjici itd. Ob koncu študija konča, se identiteta deaktivira in postane neaktivna. 
+Za boljše razumevanje bomo definirali naslednje vloge:
+\begin{itemize}
+    \item \textbf{kandidat} je vsaka oseba, ki ima možnost, da se na študij vpiše in se je na enega izmed študijskih programov tudi vpisal;
+    \item \textbf{študent} je kandidat, ki je bil uspešno vpisan na študijski program;
+    \item \textbf{bivši kandidat} je kandidat, ki mu je bil vpis na študijsko smer zavrnjen oz. če kandidat svoj vpis zavrne;
+    \item \textbf{bivši študent} je študent, ki je bil izključen, se je izpisal, nima pogojev za ponavljanje letnika ali študij dokončal.
+\end{itemize}
+Vsaka oseba ima možnost, da se vpiše na študij. Na tem mestu bomo to osebo označili kot \emph{kandidat}. \emph{Kandidat}  je vsak, ki se je vpisal na enega izmed študijskih programov. V tem koraku ima postopek dva možna izida. Prva možnost je, da je \emph{kandidat} sprejet in je uspešno vpisan na študijski program. S tem pridobi vlogo \emph{študenta}. V nasprotnem primeru (je zavrnjen) in pridobi vlogo \emph{bivšega kandidata}. Do enakega izida pride v primeru, če \emph{kandidat} svoj vpis prekliče. \newline
+Ko je \emph{kandidat} vpisan, prestopi v vlogo \emph{študenta}, torej se nahaja v aktivnem procesu študiranja. Med študijem je \emph{študent} lahko izključen ali pa se s študija prostovoljno izpiše. Če pride do tega, postane \emph{bivši študent}. Če je uspešen, torej če letnik uspešno zaključi oz. diplomira, se mu prav tako dodeli vloga \emph{bivši študent}, saj je študij zaključil. Če ni diplomiral, obstaja možnost, da je opravil letnik oz. mora letnik ponavljati. V tem primeru ni spremembe stanja (ostane mu vloga \emph{študent}). Če študent ne izpolnjuje pogojev za ponavljanje letnika oz. za vpis v višji letnik, se mu študij prekine, zato dobi vlogo \emph{bivši študent}.
+Vsak, ki je kadarkoli imel vlogo študenta (torej vse osebe z vlogami \emph{študent} oz. \emph{bivši študent}) ima oz. je imel na univerzi svojo identiteto. 
+Celoten postopek viden na sliki \ref{fig:student}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diploma-FRI-vzorec_11maj2021/ID MANAGEMENT ZA ŠTUDENTE.png}
+    \caption{\label{fig:student} Upravljanje s študentskimi identitetami}
+\end{figure}
+Naša naloga je, da vzpostavimo sistem, kjer bo vsaka oseba z vlogo \emph{študent} imel dostop do večjega števila storitev z samo enim parom uporabniškega imena in gesla. 
+\section{Namestitev Docker in Docker Compose}
+Za namestitev docker na sistemu Ubuntu lahko sledimo uradni spletni strani \cite{DockerLink}, ki nas vodi skozi proces. Najprej bomo odstranili morebitne stare verzije. V primeru da le-te niso prisotne, ukaz ne bo imel negativnih posledic.
+
+ \texttt{ \$ sudo apt-get remove docker docker-engine docker.io containerd runc}
+
+ Nato lahko naložimo Docker. Obstaja več možnih načinov. Mi bomo uporabili curl.
+ Ukaz curl je orodje za prenos datotek ali podatkov s strežnika ali na strežnik z uporabo FTP, HTTP, HTTPS, SCP, SFTP, SMB in drugih podprtih protokolov v sistemih Linux ali Unixu. Če curl ni nameščen na sistem, ga moramo naložiti z uporabo apt oz. apt-get ukaza. To lahko naredimo preprosto, z naslednjimi ukazi.
+ 
+\begin{lstlisting}[language=bash]
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt install curl
+\end{lstlisting}
+
+Sedaj imamo zadoščene vse predpogoje za namestitev dockerja. To storimo z naslednjimi ukazi.
+
+\begin{lstlisting}[language=bash]
+$  curl -fsSL https://get.docker.com -o get-docker.sh
+$  sudo sh get-docker.sh
+\end{lstlisting}
+
+Od zahtev za namestitev Authentika nam sedaj manjka samo še Docker Compose. Navodila za njegovo namestitev najdemo na spletni strani \cite{DockerCompose}. 
+Tudi Docker Compose bomo namestili z uporabo prej nameščenega ukaza curl.
+
+
+\begin{lstlisting}[language=bash]
+$ curl -SL https://github.com/docker/compose/releases/
+download/v2.5.0/docker-compose-linux-x86_64 -o /
+usr/local/bin/docker-compose
+
+$   sudo chmod +x /usr/local/bin/docker-compose
+\end{lstlisting}
+
+Namestitev nam je uspela, če se nam izpiše verzija Docker Compose-a, ko izvedemo naslednji ukaz.
+
+\begin{lstlisting}[language=bash]
+$  docker-compose --version
+\end{lstlisting}
+\section{Namestitev Authentika}
+
+Na tej točki imamo zadoščene vse predhodne zahteve. Začnemo lahko z namestitvijo ponudnika identitet. Kot omenjeno v poglavju \ref{Docker}, bomo za konfiguracijo sistema uporabili datoteko YAML. Datoteko YAML lahko dobimo na uradni spletni strani Authentika\cite{AuthentikYAML} in jo postavimo v direktorij, kjer želimo imeti naš projekt. 
+
+Docker Compose projekt vsebuje naslednje kontejnerje:
+
+\begin{itemize}
+    \item Server. To je zaledna storitev, ki izvaja vso logiko, izvaja API in dejanski del SSO. Prav tako poganja sprednji del, gosti datoteke JS/CSS in služi tudi datotekam, ki smo jih naložili za ikone itd.
+    \item Worker. Ta kontejner izvaja opravila v ozadju, vse, kar lahko vidite na strani Sistemska opravila v sprednjem delu.
+    \item Redis in PostgreSQL. Predpomnilnik in baza podatkov.
 \end{itemize}
 
-Navigirajmo na prijavno stran od Wordpressa, kjer sedaj lahko opazimo gumb ''Login with Authentik''. To bo sedaj naša izbira prijave. 
+Ker je to sveža namestitev Authentika, moramo še zgenerirati geslo. V ukaznem pozivu se premaknemo v direktorij, kamor smo shranili prej omenjeno YAML datoteko. Sedaj napišemo naslednje ukaze.
 
+\begin{lstlisting}[language=bash]
+$  sudo apt-get install -y pwgen
+echo "PG_PASS=$(pwgen -s 40 1)" >> .env
+echo "AUTHENTIK_SECRET_KEY=$(pwgen -s 50 1)" >> .env
+\end{lstlisting}
 
-\begin{figure}[H]
-\includegraphics[scale=0.9]{diploma-FRI-vzorec_11maj2021/WordpressLOGIN.jpg}
-\caption{Prijavna stran v Wordpressu z novo možnostjo prijave}
-\label{fig}
-\end{figure}
+Zaradi omejitve PostgreSQL so podprta gesla samo do 99 znakov. Več o tem si lahko preberete na uradni strani od PostgreSQL \cite{PostgreSQL}. Kljub temu bo v našem primeru zadostovalo. \newline
 
-Ko pritisnemo ta gumb nas preusmeri na stran Authentika, kjer sedaj vpišemo uporabniško ime in geslo administratorja. Če je prijava uspešna lahko sedaj vidimo administratorski pogled z vsemi možnostmi v meniju. 
+V .env datoteki v našem direktoriju se trenutno nahaja naše geslo. Poleg tega lahko v .env datoteko dodamo dve vrstici kode, da bo Authentik tekel na bolj prepoznavnih vratih 80/443. 
+
+\begin{lstlisting}[language=bash]
+AUTHENTIK_PORT_HTTP=80
+AUTHENTIK_PORT_HTTPS=443
+\end{lstlisting}
+
+Sedaj poženemo naslednji ukaz, da se spremembe uveljavijo. 
+
+\begin{lstlisting}[language=bash]
+$ sudo docker-compose up -d
+\end{lstlisting}
+
+Za dokončanje namestitve moramo izvesti še dva ukaza, ki bosta sistem tudi zagnala.
+
+\begin{lstlisting}[language=bash]
+$ sudo docker-compose pull
+$ sudo docker-compose up -d
+\end{lstlisting}
+
+Naš ponudnik identitete je postavljen. Da začnemo z upravljanjem našega ponudnika identitet, navigiramo na naslov: 
 \newline
-To nam je uspelo. Sedaj moramo ustvariti novega uporabnika v Authentiku. V Authentiku navigirajmo v direktorij ''Users'' (uporabniki), kjer lahko ustvarimo novega uporabnika s pritiskom gumba ''Create'' (ustvari). Vse kar potrebujemo je uporabniško ime, ki si ga izberemo, v tem primeru bomo izbrali ime ''student''. Ko smo ga ustvarili, kliknemo na novo ustvarjenega uporabnika, ter izberemo možnost ''Set password'' (nastavi geslo). Izberemo geslo.  
+\texttt{https://<serverIP>/if/flow/initial-setup/} 
 \newline
-Ko smo vse to naredili ponovimo postopek prijave. Navigiramo na prijavno stran, vnesemo uporabniško ime in geslo in če vidimo administratorski prikaz, nam je uspelo. 
+\texttt{<serverIP>} moramo zamenjati z IP naslovom našega Ubuntu serverja. To lahko naredimo tako, da v ukazni poziv vpišemo naslednji ukaz:
+\begin{lstlisting}[language=bash]
+ $ ip addr show
+\end{lstlisting}
+
+Iz vrnjenjih podatkov razberemo naš IP naslov, ter z njim zamenjamo značko \texttt{<serverIP>}. Ta naslov nas preusmeri na stran, kjer moramo določiti geslo za administratorja. 
+
+\section{Namestitev Wordpressa}
+Za ponudnika storitev bomo gostili spletno stran Wordpress. Uporabniki se bodo lahko prijavili v spletno stran, kjer bodo lahko urejali izgled, pisali objave, upravljali nastavitve ipd. 
+Neprijavljeni uporabniki bodo lahko samo brali objave. 
 \newline
+Namestitev Wordpressa bo lažja. Že pred pisanjem diplomskega dela sem imel v lasti svojo domeno, ki jo gostim preko hostinger.com in je dostopna na \href{www.davidkonc.xyz}{www.davidkonc.xyz} (dostopano 30.05.2022). 
+Spletna stran je uporabniku prijazna, ima namreč veliko pripomočkov, ki nam bodo delo olajšali.
+Preko uporabniškega vmesnika lahko registriramo domeno. Za ime domene sem izbral davidkonc.xyz. Le-to sem uporabljal za življenjepis, pred pisanjem mojega diplomskega dela. 
+Po uspešni registraciji domene lahko kliknemo na gumb "Manage", ki nas usmeri na meni, ki upravlja z našo spletno stranjo..
+
+Na upravljalni plošči naše spletene strani lahko vidimo gumb "Install Wordpress". Ta omogoča samodejno namestitev Wordpress vmesnika na našo spletno stran. Sedaj je na naši spletni strani (\href{www.davidkonc.xyz}{www.davidkonc.xyz}) viden osnoven Wordpress blog.
+
+\chapter{Dodajanje storitev iz federacije}
 
 \chapter{Zaključek}
 
-V tem diplomskem delu smo razvili novo avtentikacijsko rešitev za potencialno uporabo na Univerzi v Ljubljani. Vzpostavili smo ponudnika identitete Authentik, ki je odprtokoden in sicer na naš Ubuntu Serverju. Vzpostavili smo ponudnika storitev, ki bo potreboval avtentikacijo. Za to nalogo smo izbrali Wordpress, zaradi vnaprej ponujenih vtičnikov, ki so nam olajšali delo. Za povezavo med njima pa smo izbrali protokol SAML, ki podpira federacijsko avtentikacijo, da lahko uporabnikom omogočimo preprostejšo prijavo na več storitev. 
-\newline
-S tem sistemom odpravimo pomanljkjivost, ker ob kreaciji uporabnikov, priskrbimo pomožne e-mail naslove, na katere se pošlje ponastavljena gesla. 
-\newline
-Sestava sistema nam je uspela in smo se uspešno prijavili v Wordpress (ponudnik storitve) s tem, da smo se avtenticirali pri našem ponudniku identitete (Authentik). 
-\newline
-Ampak žal naša rešitev ni brez pomankljivosti. Najbolj pogosti dve pomanjkljivosti nista odpravljeni s federacijsko avtentikacijo. To so notrajnje grožnje in kraja identitete. Biti moramo popolnoma prepričani v zanesljivost uporabnikov v omrežju in imeti protokole za preverjanje pristnosti zasnovane tako, da zagotovijo, da je vsak uporabnik tisti, za katerega trdi, da je. Izobraževanje uporabnikov je potrebno za zmanjšanje tveganja človeške napake, saj lahko en sam ogrožen par federacijskih poverilnic hekerjem omogoči dostop do več aplikacij in omogoči hitro širjenje kršitve po omrežju.
-Nepravilna oskrba, ki vodi do prekoračitve privilegijev, lahko pusti odprta vrata za kršitve. Uporabnikova združena identiteta bi morala omogočati le raven dostopa, ki je potrebna za njegovo ali njeno delo in vsak začasni dostop, potreben za kratkoročne projekte, je treba preklicati takoj, ko ni več potreben. Avtomatizirane rešitve za odobritev in preklic dostopa postajajo vse pogostejša.
-\newline
-Našo rešitev bi lahko nadgradili tako, da bi vzpostavili sistem skupin, kjer bi vsakega uporabnika uvrstili v primerno skupino in potem prirejali pravice skupinam. To bi bil najlažji sistem vzdrževanja pravic uporabnikom, ker jim bi bilo potrebno samo določiti vlogo v sistemu. Tako bi potem uporabniki imeli dostop do aplikacij, ki so vezani na to vlogo. 
-\newline
-Za zaključek bi dodal, da čeprav ni naša rešitev brez napak, odpravlja glavne pomanjkljivosti avtentikacije, ki bi nam olajšale prijavo, s tem pa bi bolje zavarovali sistem. 
 
 
 \cleardoublepage
