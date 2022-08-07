@@ -448,7 +448,25 @@ Uporabljali ga bomo kot primer ponudnika storitev. Nekatere članice Univerze v 
 \subsection{Moodle}
 Moodle\cite{Moodle} je brezplačen in odprtokoden sistem za upravljanje učenja, napisan v PHP in distribuiran pod GNU General Public License. Moodle se uporablja za učenje, izobraževanje na daljavo, učilnico in druge sheme spletnega učenja v šolah, na univerzah, na delovnih mestih in v drugih sektorjih.
 \newline
-Nekatere članice ga uporabljajo za gostovanje njihovih spletnih učilnic in je popoln kandidat za ponudnika storitev.
+Članice ga uporabljajo za gostovanje njihovih spletnih učilnic in je popoln kandidat za ponudnika storitev.
+Moodle je primarno razvit v Linuxu z uporabo Apache, PostgreSQL/MySQL/MariaDB in PHP (včasih znan kot platforma LAMP). Običajno se tako izvaja tudi Moodle, čeprav obstajajo tudi druge možnosti, če so izpolnjene programske zahteve izdaje.
+\subsection{MySQL}
+MySQL je sistem za upravljanje s podatkovnimi bazami. MySQL je odprtokodna implementacija relacijske podatkovne baze, ki za delo s podatki uporablja jezik SQL.
+
+MySQL deluje na principu odjemalec - strežnik, pri čemer lahko strežnik namestimo kot sistem, porazdeljen na več strežnikov. Obstaja veliko število odjemalcev, zbirk ukazov in programskih vmesnikov za dostop do podatkovne baze MySQL. Razvija ga Oracle Corporation. 
+
+\subsection{PHP}
+PHP\cite{php} (PHP Hypertext Preprocessor) je razširjen odprtokodni programski jezik, ki se uporablja za strežniške uporabe oziroma za razvoj dinamičnih spletnih vsebin. Lahko ga primerjamo z Microsoftovim sistemom ASP, VBScript in JScript, Sun Microsystemovim sistemom JSP in Java ter sistemom CGI in Perl.
+
+Podoben je običajno strukturiranim programskim jezikom, najbolj jezikoma C in Perl, in najbolj izkušenim programerjem dovoljuje razvijanje zapletenih uporab brez dolgega učenja. 
+
+\subsection{Nextcloud}
+
+Nextcloud\cite{nextcloud} programska oprema je odprtokodna in brezplačna. Vsakdo jo lahko namesti in uporablja na svojih zasebnih strežniških napravah. 
+Nextcloud je funkcionalno podoben Dropboxu, Office 365 ali Google Drive, če se uporablja z integriranimi rešitvami pisarniškega paketa Collabora Online ali OnlyOffice. Gostuje se lahko v oblaku ali na mestu uporabe. Razširljiv je od rešitev za domačo pisarno, ki temeljijo na poceni Raspberry Pi, pa vse do podatkovnih centrov polne velikosti, ki podpirajo milijone uporabnikov.
+
+Nextcloud je popoln kandidat za integracijo v naš sistem kot ponudnik storitve. Članice ga uporabljajo za prenos in shranjevanje datotek v oblak. 
+
 \subsection{Ponudnik identitete}
 Preden lahko opišemo ponudnika identitete ga moramo izbrati. Na trgu je mnogo ponudnikov identitet, zato bomo definirali kriterije po katerem bomo ovrednotili potencialne ponudnike identitet in izbrali najbolj primernega. Kriteriji so naslednji:
 \begin{itemize}
@@ -515,6 +533,7 @@ CLI uporablja API-je Docker za nadzor ali interakcijo z demonom Docker prek skri
 \subsection{Docker Compose}
 \label{Docker}
 Docker Compose\cite{dockerComposeLink} je orodje za definiranje in izvajanje aplikacij Docker z več kontejnerji. Z možnostjo Compose uporabimo datoteko YAML za konfiguriranje storitev aplikacij. Nato z enim ukazom ustvarimo in zaženemo vse storitve iz konfiguracij.
+
 \chapter{Rešitev}
 \section{Upravljanje s študentskimi identitetami}
 Ko je kandidat sprejet na študijsko smer, se zanj generira študentska identiteta. Študetnska identiteta se potrebuje, da študent lahko dostopa do e-učilnic, e-mail naslovov, si z njo izposoja gradivo v knjižnjici itd. Ob koncu študija konča, se identiteta deaktivira in postane neaktivna. 
@@ -637,9 +656,194 @@ Po uspešni registraciji domene lahko kliknemo na gumb "Manage", ki nas usmeri n
 
 Na upravljalni plošči naše spletene strani lahko vidimo gumb "Install Wordpress". Ta omogoča samodejno namestitev Wordpress vmesnika na našo spletno stran. Sedaj je na naši spletni strani (\href{www.davidkonc.xyz}{www.davidkonc.xyz}) viden osnoven Wordpress blog.
 
+\section{Namestitev Moodla}
+Za namestitev bomo uporabili trik. V že obstoječo mapo, kjer imamo trenutno vse datoteke, ki nam služijo za delovanje Wordpressa bomo premaknili vse potrebne datoteke, ki so potrebne za delovanje Moodla. Te datoteke lahko najdemo na naslovu \href{https://download.moodle.org/releases/latest/}{https://download.moodle.org/releases/latest/}. Naša storitev bo tako dostopna na enakem spletnem naslovu, samo v poddirektoriju moodle (dostopno na \href{https://davidkonc.xyz/moodle/}{https://davidkonc.xyz/moodle/}).
+\newline
+Za pravilno delovanje Moodla bomo potreblovali še MySQL databazo. To bomo storili preko uporabniškega vmesnika na našem gostitelju spletne strani Hostinger. Vse kar od nas potrebuje so naslednji podatki:
+\begin{itemize}
+    \item ime databaze,
+    \item uporabniško ime za uporabnika baze,
+    \item geslo za uporabnika baze.
+\end{itemize}
+Te podatke si zapišemo, ker jih bomo potrebovali pri namestitvi v naslednjem koraku. 
+\newline
+Sedaj imamo vse pipravljeno, da začnemo z namestitvijo. Če gremo na domačo spletno stran \href{www.davidkonc.xyz/moodle/index.php}{www.davidkonc.xyz/moodle/index.php} nas bo pri prvem obisku te strani pričakal čarovnik za namestitev. 
+
+V prvem meniju izberemo jezik, v katerem želimo imeti naš Moodle. Izberemo slovenščino. V drugem meniju samo potrdimo pot do naših datotek. V tretjem meniju vnesemo podatke o databazi, ki smo jo kreirali za ta namen. Uporabimo podatke, ki smo jih izbrali. Naslednja dva menija imamo samo možnost potrditve. Eden nas sprašuje, če se strinjamo s pogoji uporabe in naslednji nas sprašuje kateri dodatki se bodo namestili na spletno stran. Po tem sledi samo še zadnji meni, kjer nastavimo uporabniško ime in geslo za administratorskega uporabnika. S temi podatki se sedaj lahko prijavimo v Moodle kot administrator. 
+
+\section{Namestitev Nextclouda}
+
+Namestitev Nextclouda bo podobna namestitvi Moodla. Potrebne datoteke lahko najdemo na \href{https://nextcloud.com/install/}{https://nextcloud.com/install/}. Te datoteke premaknemo v naš direktorij pri spletnem gostitelju. Ponovno ustvarimo MySQL databazo s podatki o imenu databaze, uporabniškem imenu in geslom. Te podatke si zapišemo, ker jih bomo potrebovali v naslednjem koraku.
+\newline
+Navigiramo na spletno mesto, kjer smo postavili datoteke (v našem primeru je to \href{www.davidkonc.website/index.php}{www.davidkonc.website/index.php}). Ponovno nas pričaka čarovnik za namestitev, ki od nas zahteva naslednje podatke:
+\begin{itemize}
+    \item uporabniško ime za administratorski račun,
+    \item geslo za administratorski račun,
+    \item ime uporabnika MySQL databaze,
+    \item geslo uporabnika MySQL databaze,
+    \item ime MySQL databaze.
+\end{itemize}
+
+Ko priskrbimo oz. izberemo vse potrebne podatke, se namestitev sama konča. Z izbranim uporabniškim imenom in geslom imamo dostop do administratorskega uporabnika.
+
 \chapter{Dodajanje storitev iz federacije}
 
+Sedaj imamo nameščene oz. izbrane naslednje komponente v našem sistemu:
+\begin{itemize}
+    \item ponudnik identitete (Authentik),
+    \item ponudnik storitve (Wordpress),
+    \item ponudnik storitve (Moodle),
+    \item ponudnik storitve (Nextcloud),
+\end{itemize}
+Naš naslednji korak je, da vsako izmed ponudnikov storitev povežemo z našim ponudnikom identitete, tako da bomo lahko do vsake storitve dostopali z enakim uporabniškim imenom in geslom. To bomo dosegli z uporabo SAML avtentikacije pri vsakem ponudniku storitve. 
+
+\section{Povezava Wordpress-Authentik}
+\label{authwp}
+
+Ker imamo za ponudnika storitev Wordpress, se lahko poslužimo enega izmed mnogih vtičnikov, ki bo naredil SAML implementacijo za nas enostavno.  
+
+V zavihku Plugins (vtičniki) izberemo možnost Add new (dodaj novo). Če v okno za iskanje vnesemo besedo ''SAML'', se nam prikaže vtičnik  ''SAML Single Sign On - SAML SSO Login'', ki ga je naredilo podjetje miniOrange\cite{miniOrange}. 
+\newline
+Ko ga namestimo, se nam prikaže nov meni z imenom ''miniOrange SAML 2.0 SSO''. Ta meni in meni v Authentiku bomo sedaj uporabili, da vzpostavimo avtentikacijo. 
+\newline
+Najprej pojdimo v Authentik meni, da najprej naredimo aplikacijo na ponudniku identitet. Navigiramo na IP-naslov našega ponudnika in se vpišemo z uporabniškim imenom administratorja, ki smo ga nastavili, ko smo nameščali Authentik. Ko se prijavimo, lahko vidimo, da še nimamo aktivnih aplikacij. Navigiramo na "Admin interface" (skrbniški vmesnik), kjer lahko sedaj na levi strani v meniju vidimo vse možnosti.
+
+Izberemo možnost Applications in Create, tukaj moramo pa sedaj specificirati vse potrebno, za uspešno povezavo. Tu je pomembno okno Provider (ponudnik), ki ga moramo tudi narediti. To bo naša implementacija SAML-a.Lahko kar kliknemo gumb Create provider (naredi ponudnika) in izberemo možnost ''SAML Provider''. 
+Od nas se bodo zahtevali naslednji podatki in vnesli bomo naslednje:
+\begin{itemize}
+    \item Name (ime): Wordpress (izberemo sami).
+    \item Authorization flow: default-provider-authorization-explicit-consent
+    \item ACS URL: ta podatek pridobimo na strani vtičnika na naši Wordpress strani - v našem primeru je to: https://davidkonc.xyz/
+    \item Issuer: ta podatek pridobimo na strani vtičnika na naši Wordpress strani - v našem primeru je to: https://davidkonc.xyz/wp-content/plugins/miniorange-saml-20-single-sign-on/
+    \item Service Provider Binding:  Post
+\end{itemize}
+
+Ko imamo ustvarjeneva ponudnika (Provider) v Authentiku, lahko dokončamo ustvarjanje aplikacije. Izpolniti moramo naslednje možnosti:
+\begin{itemize}
+    \item Name (ime): Wordpress (izberemo sami).
+    \item Slug: Wordpress (izberemo sami).
+    \item Provider: Wordpress (ime od pravkar ustvarjenega ponudnika).
+    \item Policy engline mode: ANY, any policy must match to grant access (privzeta vrednost). 
+\end{itemize}
+
+Sedaj smo na strani Authentika opravili. Konfigurirajmmo še vtičnik v Wordpressu. V meniju vtičnika izberemo ''Service Provider Setup'' in izberemo možnost ''Upload IDP Metadata''. Tukaj moramo sedaj vnesti XML datoteko z metapodatki od našega ponudnika identitet. To lahko dobimo pri našem ponudniku identitet v zavihku ''Provider'', kjer izberemo ponudnika, ki smo ga mi kreirali in ga izberemo. Na dnu strani se nam pojavi veliko okno z vsemi metapodatki. To lahko prenesemo, da potem naložimo v vtičnik v Wordpressu. 
+
+\begin{figure}[H]
+\hspace{-4cm}
+\includegraphics[scale=0.5]{diploma-FRI-vzorec_11maj2021/SAMLMetadata.jpg}
+\caption{Metapodatki v Authentiku}
+\label{fig}
+\end{figure}
+
+S povezavo smo s tem zaključili. V prijavnem meniju lahko sedaj vidimo možnost prijave z Authentikom, ki nas preusmeri na spletno stran Authentika, če ga pritisnemo. 
+
+\section{Povezava Moodle-Authentik}
+
+Za povezavo Moodla z Authentikom bomo prav tako uporabili vtičnik, ki ga Moodle podpira. Preden storimo to, pa pripravimo vse potrebno v Authentiku. Ustvarimo novega ponudnika. Izberemo oz. določimo naslednje podatke:
+
+\begin{itemize}
+    \item Name (ime): Moodle (izberemo sami).
+    \item Authorization flow: default-provider-authorization-explicit-consent
+    \item ACS URL: https://davidkonc.xyz/moodle/auth/saml2/sp/saml2-acs.php/davidkonc.xyz
+    \item Issuer: https://davidkonc.xyz/moodle/auth/saml2/sp/metadata.php
+    \item Service Provider Binding:  Post
+\end{itemize}
+
+Nato ustvarimo aplikacijo z naslednjimi podatki:
+\begin{itemize}
+    \item Name (ime): Moodle (izberemo sami).
+    \item Slug: moodle (izberemo sami).
+    \item Provider: Moodle (ime od pravkar ustvarjenega ponudnika).
+    \item Policy engline mode: ANY, any policy must match to grant access (privzeta vrednost). 
+\end{itemize}
+
+Na strani Authentika imamo sedaj vse pripravljeno. Podobno storimo pri Moodlu. 
+
+Vtičnik lahko prenesmo na spletni strani \href{https://moodle.org/plugins/}{https://moodle.org/plugins/}. Ime našega vtičnika je ''SAML2 Single sign on''. V Moodle meniju, gremo v meni "Plugins", kamor naložimo prenesen vtičnik. 
+Navigiramo do nastavitev pravkar nameščenega vtičnika. Tu lahko vidimo veliko možnosti, ampak nas bodo zanimale samo naslednje, ki jih primerno nastavimo:
+\begin{itemize}
+    \item IdP metadata xml OR public xml URL: metadato dobimo v Authentiku, v našem pravkar ustvarjenem podnudniku.
+    \item IdP label override: Authentik! (izberemo, kaj bo pisalo na gumbu za prijavo).
+    \item Allow create: Yes. (možnost omogoči ustvarjanje uporabnikov).
+\end{itemize}
+S povezovanjem smo sedaj zaključili. V meniju za prijavo lahko sedaj vidimo možnost za prijavo z Authentikom.
+
+\section{Povezava Nextcloud-Authentik}
+V Authentiku ponovno kreiramo ponudnika za naslednjimi nastavitvami:
+\begin{itemize}
+    \item Name (ime): nextcloud-saml (izberemo sami).
+    \item Authorization flow: default-provider-authorization-explicit-consent 
+    \item ACS URL: https://davidkonc.website/index.php/apps/user\_saml/saml/acs
+    \item Issuer: http://vmi868001.contaboserver.net/ (domena našega Authentika).
+    \item Service Provider Binding:  Post
+    \item Signing Certificate: authentik Self-signed Certificate
+\end{itemize}
+Pri ustvaritvi aplikacije uporabimo naslednje nastavitve:
+
+\begin{itemize}
+    \item Name (ime): Nextcloud (izberemo sami).
+    \item Slug: nextcloud (izberemo sami).
+    \item Provider: nextcloud\_saml (ime od pravkar ustvarjenega ponudnika).
+    \item Policy engline mode: ANY, any policy must match to grant access (privzeta vrednost). 
+\end{itemize}
+
+Poleg tega bomo za uspešno povezavo potrebovali še certifikat od Authentika, ki ga lahko pridobimo v zavihku ''Certificates''. Sedaj pa uredimo še na strani Nextclouda.
+
+V administratorskem okolju navigiramo v zavihek ''Orodja'', kjer lahko namestimo vtičnik ''Overitev SSO in SAML''. Nato navigiramo v nastavitve tega vtičnika. Tukaj nastavimo naslednje nastavitve:
+
+\begin{itemize}
+    \item Dovoli uporabo več uporabniških računov: DA,
+    \item Izbirno prikazno ime ponudnika istovetnosti: authentik,
+    \item Dovolilo IdP (zapisano kot naslov URI): http://vmi868001.contaboserver.net,
+    \item Ciljni naslov URL za IdP, kamor bo ponudnik storitev poslal sporočilo o zahtevi overtive: http://vmi868001.contaboserver.net/application/saml
+    /nextcloud\_meta/sso/binding/redirect/
+    \item Ciljni naslov URL za IdP, kamor bo ponudnik storitev poslal zahtevo SLO:http://vmi868001.contaboserver.net/
+    if/session-end/nextcloud\_meta/
+    \item Javno potrdilo X.509 IdP: Priskrbeni certifikat od Authentika. 
+    \item Atribut za preslikavo prikaznega imena: http://schemas.xmlsoap.org/ws/2005/05/
+    identity/claims/name
+    \item Atribut za preslikavo elektronskega naslova: http://schemas.xmlsoap.org/ws/
+    2005/05/identity/claims/emailaddress
+    \item Atribut za preslikavo uporabniških skupin: http://schemas.xmlsoap.org/claims/Group
+\end{itemize}
+
+S povezovanjem smo sedaj zaključili. V meniju za prijavo lahko sedaj vidimo možnost za prijavo z Authentikom.
+
+
+\section{Test konfiguracije}
+
+Z implementacijo smo sedaj zaključili. Preverimo, če sedaj vse deluje kot mora. 
+To bomo naredili na naslednji način:
+\begin{itemize}
+    \item V direktoriju uporabnikov v Authentiku bomo ustvarili novega uporabnika, ki bo predstavljal uporabniški račun, ki bi ga imel študent.
+    \item Navigirali bomo na prijavno stran od vsakega ponudnika storitev (Wordpress, Moodle, Nextcloud), ter se poskusili prijaviti z uporabniškim imenom in geslom od novo ustvarjenega uporabnika. Če je prijava uspešna, implementacija deluje. 
+\end{itemize}
+
+V Authentiku navigirajmo v direktorij ''Users'' (uporabniki), kjer lahko ustvarimo novega uporabnika s pritiskom gumba ''Create'' (ustvari). Vse kar potrebujemo je uporabniško ime, ki si ga izberemo, v tem primeru bomo izbrali ime ''student''. Ko smo ga ustvarili, kliknemo na novo ustvarjenega uporabnika, ter izberemo možnost ''Set password'' (nastavi geslo). Izberemo geslo.  
+
+\subsubsection{Prijava v Wordpress}
+Navigirajmo na prijavno stran od Wordpressa, kjer sedaj lahko opazimo gumb ''Login with Authentik''. To bo sedaj naša izbira prijave. Ko pritisnemo ta gumb nas preusmeri na stran Authentika, kjer sedaj vpišemo uporabniško ime in geslo novega uporabnika. Če je prijava uspešna, lahko sedaj vidimo administratorski pogled z vsemi možnostmi v meniju. 
+
+\subsubsection{Prijava v Moodle}
+Navigirajmo na prijavno stran od Moodla, kjer sedaj lahko opazimo gumb ''Authentik!''. To bo sedaj naša izbira prijave. Ko pritisnemo ta gumb nas preusmeri na stran Authentika, kjer sedaj vpišemo uporabniško ime in geslo novega uporabnika. Če je prijava uspešna, nas preusmeri v meni, kjer moramo nastaviti ime, priimek in e-poštni naslov. Ko storimo to, imamo dostop do učilnice. 
+
+\subsubsection{Prijava v Nextcloud}
+Navigirajmo na prijavno stran od Nextclouda, kjer sedaj lahko opazimo gumb ''authentik''. To bo sedaj naša izbira prijave. Ko pritisnemo ta gumb nas preusmeri na stran Authentika, kjer sedaj vpišemo uporabniško ime in geslo novega uporabnika. Če je prijava uspešna, nas preusmeri v Nextcloud z že ustvarjenim uporabnikom, kjer imamo sedaj poln dostop. 
+
 \chapter{Zaključek}
+
+V tem diplomskem delu smo razvili novo avtentikacijsko rešitev za potencialno uporabo na Univerzi v Ljubljani. Vzpostavili smo ponudnika identitete Authentik, ki je odprtokoden in sicer na naš Ubuntu Serverju. Vzpostavili smo ponudnike storitev, ki bodo potrebovali avtentikacijo. Za to nalogo smo izbrali Wordpress, Moodle ter Nextcloud zaradi vnaprej ponujenih vtičnikov, ki so nam olajšali delo. Za povezavo med njimi pa smo izbrali protokol SAML, ki podpira federacijsko avtentikacijo, da lahko uporabnikom omogočimo preprostejšo prijavo na več storitev. 
+\newline
+Sestava sistema nam je uspela in smo se uspešno prijavili v vse ponudnike storitev s tem, da smo se avtenticirali pri našem ponudniku identitete (Authentik). 
+\newline
+Ampak žal naša rešitev ni brez pomankljivosti. Najbolj pogosti dve pomanjkljivosti nista odpravljeni s federacijsko avtentikacijo. To so notrajnje grožnje in kraja identitete. Biti moramo popolnoma prepričani v zanesljivost uporabnikov v omrežju in imeti protokole za preverjanje pristnosti zasnovane tako, da zagotovijo, da je vsak uporabnik tisti, za katerega trdi, da je. Izobraževanje uporabnikov je potrebno za zmanjšanje tveganja človeške napake, saj lahko en sam ogrožen par federacijskih poverilnic hekerjem omogoči dostop do več aplikacij in omogoči hitro širjenje kršitve po omrežju.
+Nepravilna oskrba, ki vodi do prekoračitve privilegijev, lahko pusti odprta vrata za kršitve. Uporabnikova združena identiteta bi morala omogočati le raven dostopa, ki je potrebna za njegovo ali njeno delo in vsak začasni dostop, potreben za kratkoročne projekte, je treba preklicati takoj, ko ni več potreben. Avtomatizirane rešitve za odobritev in preklic dostopa postajajo vse pogostejša.
+\newline
+Našo rešitev bi lahko nadgradili tako, da bi vzpostavili sistem skupin, kjer bi vsakega uporabnika uvrstili v primerno skupino in potem prirejali pravice skupinam. To bi bil najlažji sistem vzdrževanja pravic uporabnikom, ker jim bi bilo potrebno samo določiti vlogo v sistemu. Tako bi potem uporabniki imeli dostop do aplikacij, ki so vezani na to vlogo. 
+\newline
+Prav tako bi lahko rešitev nadgradili, da bo uporabili več varnostnih protokolov, kot so npr. LDAP (Lightweight Directory Access Protocol) oz. OIDC (OpenID Connect). Vse aplikacije v sistemu Univerze v Ljubljani ne uporabljajo SAML avtentikacije, ampak nekatere uporabljajo tudi druge (npr. Eduroam uporablja LDAP za avtentikacijo). 
+\newline
+Za zaključek bi dodali, da čeprav naša rešitev ni popolna, odpravlja glavne pomanjkljivosti avtentikacije, ki bi nam olajšale prijavo, s tem pa bi bolje zavarovali sistem. 
 
 
 
